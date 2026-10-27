@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Traspaso RRHH</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+--bg:#f5f6f8;--card:#fff;--tx:#1d2330;--mut:#667085;--bd:#e3e6ec;--ac:#3b5bdb;--acs:#e8edff;--ok:#2b8a3e;--warn:#e67700;--bad:#c92a2a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#14171d;--card:#1d222b;--tx:#e8eaf0;--mut:#9aa3b2;--bd:#2c3340;--ac:#7c93ff;--acs:#262f52;--ok:#69db7c;--warn:#ffa94d;--bad:#ff8787}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14171d;--card:#1d222b;--tx:#e8eaf0;--mut:#9aa3b2;--bd:#2c3340;--ac:#7c93ff;--acs:#262f52;--ok:#69db7c;--warn:#ffa94d;--bad:#ff8787}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;margin:0}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sub{color:var(--mut);font-size:.85rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--ac)}
+button.p{background:var(--ac);border-color:var(--ac);color:#fff}
+button.d{color:var(--bad)}
+input,select,textarea{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:7px 9px;width:100%}
+textarea{min-height:90px;resize:vertical}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.bar input,.bar select{width:auto;flex:1 1 140px}
+.tabs button.on{background:var(--acs);border-color:var(--ac);color:var(--ac);font-weight:600}
+.prog{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;background:var(--ok)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.grp{margin-bottom:16px}
+.grp h3{margin:0 0 6px;font-size:.95rem;display:flex;gap:8px;align-items:center}
+.cnt{background:var(--acs);color:var(--ac);border-radius:10px;padding:0 8px;font-size:.78rem}
+.task{cursor:pointer;margin-bottom:6px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between}
+.task:hover{border-color:var(--ac)}
+.tt{font-weight:600}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.8rem;color:var(--mut)}
+.b{border-radius:6px;padding:1px 7px;font-size:.75rem;border:1px solid var(--bd)}
+.b.alta{color:var(--bad);border-color:var(--bad)}.b.media{color:var(--warn);border-color:var(--warn)}.b.baja{color:var(--mut)}
+.b.ok{color:var(--ok);border-color:var(--ok)}.b.late{color:var(--bad);border-color:var(--bad)}
+.kan{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--acs);border-radius:10px;padding:8px;min-height:220px}
+.col h4{margin:2px 4px 8px;font-size:.9rem;display:flex;justify-content:space-between}
+.col .card{margin-bottom:8px;cursor:grab}
+.col.over{outline:2px dashed var(--ac)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi b{display:block;font-size:1.7rem}
+.rep{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.row{display:grid;grid-template-columns:110px 1fr 28px;gap:8px;align-items:center;font-size:.85rem;margin:4px 0}
+.row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .bg{height:10px;background:var(--bd);border-radius:6px;overflow:hidden}
+.row .bg i{display:block;height:100%;background:var(--ac)}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;width:min(640px,94vw);padding:16px}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f label{font-size:.8rem;color:var(--mut);display:block}
+.f .w{grid-column:1/-1}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.empty{color:var(--mut);text-align:center;padding:24px}
+@media(max-width:560px){.f{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>📋 Traspaso de tareas RRHH</h1>
+      <div class="sub">Dejá todo ordenado: tareas, responsables, notas y estado del traspaso.</div>
+    </div>
+    <div class="bar" style="margin:0">
+      <button class="p" id="new">+ Nueva tarea</button>
+      <button id="bulk" title="Asigna el nuevo responsable a las tareas visibles">Asignar en bloque</button>
+      <button id="bk">Respaldo</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="f">
+      <div><label>Responsable actual (vos)</label><input id="from" placeholder="Tu nombre"></div>
+      <div><label>Nuevo responsable por defecto</label><input id="to" placeholder="Nombre de quien recibe"></div>
+    </div>
+    <div class="sub" id="progtxt" style="margin-top:8px"></div>
+    <div class="prog"><i id="progbar" style="width:0"></i></div>
+  </div>
+
+  <div class="bar tabs">
+    <button data-v="list" class="on">Lista</button>
+    <button data-v="kanban">Kanban</button>
+    <button data-v="rep">Reportes</button>
+  </div>
+  <div class="bar" id="filters">
+    <input id="q" placeholder="Buscar…">
+    <select id="fc"></select>
+    <select id="fs"></select>
+    <select id="fo"></select>
+  </div>
+
+  <div id="view"></div>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="frm" style="margin:0">
+    <div class="f">
+      <div class="w"><label>Tarea</label><input id="t_title" required></div>
+      <div><label>Categoría</label><input id="t_cat" list="cats" placeholder="Ej: Nómina"><datalist id="cats"></datalist></div>
+      <div><label>Estado</label><select id="t_status"></select></div>
+      <div><label>Prioridad</label><select id="t_prio"><option>alta</option><option selected>media</option><option>baja</option></select></div>
+      <div><label>Frecuencia</label><select id="t_freq"><option>Única vez</option><option>Diaria</option><option>Semanal</option><option>Mensual</option><option>Trimestral</option><option>Anual</option></select></div>
+      <div><label>Próxima fecha / vencimiento</label><input type="date" id="t_due"></div>
+      <div><label>Responsable actual</label><input id="t_owner"></div>
+      <div class="w"><label>Nuevo responsable</label><input id="t_new" placeholder="Quién se hace cargo"></div>
+      <div class="w"><label>Notas, pasos, accesos, contactos, enlaces</label><textarea id="t_notes" placeholder="Cómo se hace, dónde está la documentación, a quién consultar, claves de sistema (no pegues contraseñas), proveedores…"></textarea></div>
+      <div class="w"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="t_done" style="width:auto"> Traspaso confirmado (el nuevo responsable ya lo sabe)</label></div>
+    </div>
+    <div class="acts">
+      <button type="button" class="d" id="del">Eliminar</button>
+      <button type="button" id="dup">Duplicar</button>
+      <button type="button" id="cancel">Cancelar</button>
+      <button type="submit" class="p">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="bdlg">
+  <div class="sub" style="margin-bottom:6px">Tus datos viven en este navegador. Copiá el respaldo y guardalo; para restaurar, pegá el JSON y tocá Importar.</div>
+  <textarea id="bta" style="min-height:220px;font-family:ui-monospace,monospace;font-size:.8rem"></textarea>
+  <div class="acts">
+    <button id="bjson">Ver JSON</button>
+    <button id="bcsv">Ver CSV</button>
+    <button id="bcopy">Copiar</button>
+    <button id="bimp" class="p">Importar JSON</button>
+    <button id="bclose">Cerrar</button>
+  </div>
+  <div class="acts" style="justify-content:flex-start"><button class="d" id="breset">Borrar todo</button></div>
+</dialog>
+
+<script>
+var KEY='rrhh-traspaso-v1';
+var STATES={pend:'Pendiente',prog:'En curso',block:'Bloqueada',done:'Resuelta'};
+var S=null,view='list',editId=null;
+var $=function(i){return document.getElementById(i)};
+function uid(){return Math.random().toString(36).slice(2,9)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function seed(){
+  function t(title,cat,status,prio,freq,notes){return{id:uid(),title:title,cat:cat,status:status,prio:prio,freq:freq,due:'',owner:'',nw:'',notes:notes||'',done:false}}
+  return{from:'',to:'',tasks:[
+    t('Liquidación de sueldos','Nómina','prog','alta','Mensual','Cierre el día 25. Archivo base en la carpeta de Nómina.'),
+    t('Presentación de cargas sociales','Legal y cumplimiento','pend','alta','Mensual','Vence a mitad de mes. Contacto del estudio contable en notas.'),
+    t('Búsqueda de analista de datos','Reclutamiento','prog','media','Única vez','Candidatos en etapa de entrevistas.'),
+    t('Onboarding nuevos ingresos','Onboarding','pend','media','Semanal','Checklist de bienvenida y accesos.'),
+    t('Evaluaciones de desempeño','Desempeño','pend','baja','Anual','Calendario de ciclos con gerencias.')
+  ]};
+}
+function load(){try{var r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);return}}catch(e){}S=seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function cats(){var a=[];S.tasks.forEach(function(t){var c=t.cat||'Sin categoría';if(a.indexOf(c)<0)a.push(c)});return a.sort()}
+function owners(){var a=[];S.tasks.forEach(function(t){var o=t.nw||S.to;if(o&&a.indexOf(o)<0)a.push(o)});return a.sort()}
+function late(t){return t.due&&t.due<today()&&t.status!=='done'}
+function filtered(){
+  var q=$('q').value.toLowerCase(),c=$('fc').value,s=$('fs').value,o=$('fo').value;
+  return S.tasks.filter(function(t){
+    if(c&&(t.cat||'Sin categoría')!==c)return false;
+    if(s&&t.status!==s)return false;
+    if(o==='__none'&&(t.nw||S.to))return false;
+    if(o&&o!=='__none'&&(t.nw||S.to)!==o)return false;
+    if(q&&(t.title+' '+t.notes+' '+t.cat).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+}
+function opts(list,all,cur){return '<option value="">'+all+'</option>'+list.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===cur?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')}
+function refreshFilters(){
+  var c=$('fc').value,s=$('fs').value,o=$('fo').value;
+  $('fc').innerHTML=opts(cats().map(function(x){return[x,x]}),'Todas las categorías',c);
+  $('fs').innerHTML=opts(Object.keys(STATES).map(function(k){return[k,STATES[k]]}),'Todos los estados',s);
+  $('fo').innerHTML=opts([['__none','Sin nuevo responsable']].concat(owners().map(function(x){return[x,x]})),'Todos los responsables',o);
+  $('cats').innerHTML=cats().map(function(x){return '<option value="'+esc(x)+'">'}).join('');
+}
+function badges(t){
+  var h='<span class="b '+t.prio+'">'+t.prio+'</span>';
+  if(t.freq&&t.freq!=='Única vez')h+='<span class="b">↻ '+esc(t.freq)+'</span>';
+  if(t.due)h+='<span class="b'+(late(t)?' late':'')+'">📅 '+esc(t.due)+'</span>';
+  if(t.done)h+='<span class="b ok">✓ traspasada</span>';
+  return h;
+}
+function who(t){var n=t.nw||S.to;return n?esc(t.owner||S.from||'—')+' → <b>'+esc(n)+'</b>':'<span class="b late">sin nuevo responsable</span>'}
+function renderList(){
+  var l=filtered();if(!l.length)return '<div class="empty">No hay tareas. Creá la primera con “+ Nueva tarea”.</div>';
+  var g={};l.forEach(function(t){var c=t.cat||'Sin categoría';(g[c]=g[c]||[]).push(t)});
+  return Object.keys(g).sort().map(function(c){
+    return '<div class="grp"><h3>'+esc(c)+' <span class="cnt">'+g[c].length+'</span></h3>'+g[c].map(function(t){
+      return '<div class="card task" data-id="'+t.id+'"><div><div class="tt">'+esc(t.title)+'</div><div class="meta">'+who(t)+(t.notes?' · 📝':'')+'</div></div><div class="meta"><span class="b">'+STATES[t.status]+'</span>'+badges(t)+'</div></div>';
+    }).join('')+'</div>';
+  }).join('');
+}
+function renderKanban(){
+  var l=filtered();
+  return '<div class="kan">'+Object.keys(STATES).map(function(k){
+    var c=l.filter(function(t){return t.status===k});
+    return '<div class="col" data-s="'+k+'"><h4>'+STATES[k]+' <span class="cnt">'+c.length+'</span></h4>'+c.map(function(t){
+      return '<div class="card" draggable="true" data-id="'+t.id+'"><div class="tt">'+esc(t.title)+'</div><div class="meta" style="margin:4px 0">'+esc(t.cat||'Sin categoría')+'</div><div class="meta">'+badges(t)+'</div><div class="meta" style="margin-top:4px">'+who(t)+'</div></div>';
+    }).join('')+'</div>';
+  }).join('')+'</div>';
+}
+function bars(title,map){
+  var k=Object.keys(map).sort(function(a,b){return map[b]-map[a]}),mx=Math.max.apply(null,k.map(function(x){return map[x]}).concat([1]));
+  return '<div class="card"><b>'+title+'</b>'+(k.length?k.map(function(x){return '<div class="row"><span title="'+esc(x)+'">'+esc(x)+'</span><span class="bg"><i style="width:'+map[x]/mx*100+'%"></i></span><span>'+map[x]+'</span></div>'}).join(''):'<div class="sub">Sin datos</div>')+'</div>';
+}
+function renderRep(){
+  var l=S.tasks,n=l.length,c={},s={},p={},o={},f={};
+  l.forEach(function(t){
+    var k=t.cat||'Sin categoría';c[k]=(c[k]||0)+1;
+    s[STATES[t.status]]=(s[STATES[t.status]]||0)+1;
+    p[t.prio]=(p[t.prio]||0)+1;
+    var w=t.nw||S.to||'Sin asignar';o[w]=(o[w]||0)+1;
+    f[t.freq||'Única vez']=(f[t.freq||'Única vez']||0)+1;
+  });
+  var conf=l.filter(function(t){return t.done}).length,sin=l.filter(function(t){return !(t.nw||S.to)}).length,
+      sinN=l.filter(function(t){return !t.notes.trim()}).length,lt=l.filter(late);
+  function kp(v,txt){return '<div class="card kpi"><b>'+v+'</b><span class="sub">'+txt+'</span></div>'}
+  return '<div class="kpis">'+kp(n,'Tareas totales')+kp(conf+' / '+n,'Traspasos confirmados')+kp(sin,'Sin nuevo responsable')+kp(sinN,'Sin notas de traspaso')+kp(lt.length,'Vencidas')+'</div>'+
+  '<div class="rep">'+bars('Por categoría',c)+bars('Por estado',s)+bars('Por prioridad',p)+bars('Por nuevo responsable',o)+bars('Por frecuencia',f)+
+  '<div class="card"><b>⚠️ Para completar antes de irte</b>'+(function(){
+    var a=l.filter(function(t){return !(t.nw||S.to)||!t.notes.trim()||late(t)});
+    return a.length?a.map(function(t){return '<div class="row" style="grid-template-columns:1fr auto;cursor:pointer" data-id="'+t.id+'"><span>'+esc(t.title)+'</span><span class="sub">'+[!(t.nw||S.to)?'sin responsable':'',!t.notes.trim()?'sin notas':'',late(t)?'vencida':''].filter(Boolean).join(', ')+'</span></div>'}).join(''):'<div class="sub">Todo en orden 🎉</div>';
+  })()+'</div></div>';
+}
+function render(){
+  refreshFilters();
+  $('from').value=S.from;$('to').value=S.to;
+  var n=S.tasks.length,d=S.tasks.filter(function(t){return t.done}).length;
+  $('progtxt').textContent='Traspaso confirmado: '+d+' de '+n+' tareas ('+(n?Math.round(d/n*100):0)+'%)';
+  $('progbar').style.width=(n?d/n*100:0)+'%';
+  $('filters').style.display=view==='rep'?'none':'flex';
+  document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.v===view)});
+  $('view').innerHTML=view==='list'?renderList():view==='kanban'?renderKanban():renderRep();
+}
+function openEdit(id){
+  editId=id;var t=S.tasks.filter(function(x){return x.id===id})[0]||{title:'',cat:$('fc').value,status:'pend',prio:'media',freq:'Única vez',due:'',owner:S.from,nw:'',notes:'',done:false};
+  $('t_status').innerHTML=Object.keys(STATES).map(function(k){return '<option value="'+k+'">'+STATES[k]+'</option>'}).join('');
+  $('t_title').value=t.title;$('t_cat').value=t.cat;$('t_status').value=t.status;$('t_prio').value=t.prio;$('t_freq').value=t.freq;
+  $('t_due').value=t.due;$('t_owner').value=t.owner;$('t_new').value=t.nw;$('t_notes').value=t.notes;$('t_done').checked=!!t.done;
+  $('t_new').placeholder=S.to?'Por defecto: '+S.to:'Quién se hace cargo';
+  $('del').style.display=$('dup').style.display=id?'':'none';
+  $('dlg').showModal();
+}
+function readForm(){return{title:$('t_title').value.trim(),cat:$('t_cat').value.trim(),status:$('t_status').value,prio:$('t_prio').value,freq:$('t_freq').value,due:$('t_due').value,owner:$('t_owner').value.trim(),nw:$('t_new').value.trim(),notes:$('t_notes').value,done:$('t_done').checked}}
+$('frm').addEventListener('submit',function(e){
+  e.preventDefault();var v=readForm();if(!v.title)return;
+  if(editId){Object.assign(S.tasks.filter(function(x){return x.id===editId})[0],v)}else{v.id=uid();S.tasks.push(v)}
+  save();$('dlg').close();render();
+});
+$('cancel').onclick=function(){$('dlg').close()};
+$('del').onclick=function(){if(confirm('¿Eliminar esta tarea?')){S.tasks=S.tasks.filter(function(x){return x.id!==editId});save();$('dlg').close();render()}};
+$('dup').onclick=function(){var v=readForm();v.id=uid();v.title+=' (copia)';S.tasks.push(v);save();$('dlg').close();render()};
+$('new').onclick=function(){openEdit(null)};
+$('bulk').onclick=function(){
+  var l=filtered();if(!l.length)return;
+  var n=prompt('Nuevo responsable para las '+l.length+' tareas visibles:',S.to);
+  if(n===null)return;l.forEach(function(t){t.nw=n.trim()});save();render();
+};
+$('from').oninput=function(){S.from=this.value;save()};
+$('to').onchange=function(){S.to=this.value.trim();save();render()};
+['q','fc','fs','fo'].forEach(function(i){$(i).oninput=render});
+document.querySelector('.tabs').onclick=function(e){if(e.target.dataset.v){view=e.target.dataset.v;render()}};
+$('view').addEventListener('click',function(e){var el=e.target.closest('[data-id]');if(el)openEdit(el.dataset.id)});
+$('view').addEventListener('dragstart',function(e){var el=e.target.closest('[data-id]');if(el)e.dataTransfer.setData('text/plain',el.dataset.id)});
+$('view').addEventListener('dragover',function(e){var c=e.target.closest('.col');if(c){e.preventDefault();c.classList.add('over')}});
+$('view').addEventListener('dragleave',function(e){var c=e.target.closest('.col');if(c)c.classList.remove('over')});
+$('view').addEventListener('drop',function(e){
+  var c=e.target.closest('.col');if(!c)return;e.preventDefault();
+  var t=S.tasks.filter(function(x){return x.id===e.dataTransfer.getData('text/plain')})[0];
+  if(t){t.status=c.dataset.s;save();render()}
+});
+/* Respaldo */
+function csv(){
+  var h=['Tarea','Categoría','Estado','Prioridad','Frecuencia','Fecha','Responsable actual','Nuevo responsable','Traspaso confirmado','Notas'];
+  function q(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}
+  return [h.map(q).join(',')].concat(S.tasks.map(function(t){return [t.title,t.cat,STATES[t.status],t.prio,t.freq,t.due,t.owner||S.from,t.nw||S.to,t.done?'Sí':'No',t.notes].map(q).join(',')})).join('\n');
+}
+$('bk').onclick=function(){$('bta').value=JSON.stringify(S,null,1);$('bdlg').showModal()};
+$('bjson').onclick=function(){$('bta').value=JSON.stringify(S,null,1)};
+$('bcsv').onclick=function(){$('bta').value=csv()};
+$('bcopy').onclick=function(){$('bta').select();try{document.execCommand('copy')}catch(e){}if(navigator.clipboard)navigator.clipboard.writeText($('bta').value).catch(function(){})};
+$('bimp').onclick=function(){
+  try{var d=JSON.parse($('bta').value);if(!d.tasks)throw 0;if(confirm('Esto reemplaza los datos actuales. ¿Continuar?')){S=d;save();$('bdlg').close();render()}}
+  catch(e){alert('El texto no es un respaldo JSON válido.')}
+};
+$('bclose').onclick=function(){$('bdlg').close()};
+$('breset').onclick=function(){if(confirm('¿Borrar todas las tareas?')){S={from:S.from,to:S.to,tasks:[]};save();$('bdlg').close();render()}};
+load();render();
+</script>
+</body>
+</html>
